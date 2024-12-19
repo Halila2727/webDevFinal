@@ -1,0 +1,9 @@
+<div class="joke-result">
+    <% if (joke.type === 'single') { %>
+        <p class="joke-text"><%= joke.joke %></p>
+    <% } else { %>
+        <p class="joke-setup"><%= joke.setup %></p>
+        <p class="joke-delivery"><%= joke.delivery %></p>
+    <% } %>
+    <p class="joke-category">Category: <%= joke.category %></p>
+</div>

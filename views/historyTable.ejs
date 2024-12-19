@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Joke History</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <%- include('partials/navbar') %>
+    
+    <main class="container">
+        <h1>Joke History</h1>
+        <table class="history-table">
+            <thead>
+                <tr>
+                    <th>Type</th>
+                    <th>Category</th>
+                    <th>Content</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% jokes.forEach(joke => { %>
+                    <tr>
+                        <td><%= joke.type %></td>
+                        <td><%= joke.category %></td>
+                        <td>
+                            <% if (joke.type === 'single') { %>
+                                <%= joke.joke %>
+                            <% } else { %>
+                                <p><strong>Setup:</strong> <%= joke.setup %></p>
+                                <p><strong>Delivery:</strong> <%= joke.delivery %></p>
+                            <% } %>
+                        </td>
+                        <td><%= new Date(joke.created_at).toLocaleDateString() %></td>
+                    </tr>
+                <% }) %>
+            </tbody>
+        </table>
+    </main>
+
+    <%- include('partials/footer') %>
+</body>
+</html>
