@@ -24,7 +24,6 @@ app.get('/joke/:category', async (req, res) => {
     const response = await axios.get(`https://v2.jokeapi.dev/joke/${category}`);
     const joke = response.data;
     
-    // Save to database
     if (joke.type === 'single') {
       await db.query(
         'INSERT INTO jokes (type, category, joke) VALUES ($1, $2, $3)',
@@ -33,7 +32,7 @@ app.get('/joke/:category', async (req, res) => {
     } else {
       await db.query(
         'INSERT INTO jokes (type, category, setup, delivery) VALUES ($1, $2, $3, $4)',
-        ['twopart', joke.category, joke.setup, joke.delivery]
+        ['two-parter', joke.category, joke.setup, joke.delivery]
       );
     }
 
@@ -41,6 +40,35 @@ app.get('/joke/:category', async (req, res) => {
   } catch (error) {
     console.error('Error:', error);
     res.status(500).send('Error fetching joke');
+  }
+});
+
+app.get('/search', async (req, res) => {
+  try {
+      const searchTerm = req.query.term;
+      const response = await axios.get(`https://v2.jokeapi.dev/joke/Any?contains=${searchTerm}`);
+      const joke = response.data;
+      
+      if (joke.error) {
+          return res.render('jokeResult', { error: 'No jokes found with that term.' });
+      }
+
+      if (joke.type === 'single') {
+          await db.query(
+              'INSERT INTO jokes (type, category, joke) VALUES ($1, $2, $3)',
+              ['single', joke.category, joke.joke]
+          );
+      } else {
+          await db.query(
+              'INSERT INTO jokes (type, category, setup, delivery) VALUES ($1, $2, $3, $4)',
+              ['twopart', joke.category, joke.setup, joke.delivery]
+          );
+      }
+
+      res.render('jokeResult', { joke });
+  } catch (error) {
+      console.error('Error:', error);
+      res.render('jokeResult', { error: 'No matching joke found with your keyword(s)!' });
   }
 });
 

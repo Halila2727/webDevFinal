@@ -1,20 +1,103 @@
+<!-- Homepage, where jokes will be displayed based on user input -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Joke App</title>
-    <link rel="stylesheet" href="/css/styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f0f0f0;
+        }
+        .top {
+            align-items: center;
+            font-family: 'Courier New', Courier, monospace;
+            color:darkgoldenrod;
+            font-size: 40px;
+        }
+        /* */
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .joke-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin: 20px 0;
+        }
+        .categories {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin: 15px 0;
+        }
+        .categories button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+        }
+        .categories button:hover {
+            background-color: #0056b3;
+        }
+    </style>
 </head>
 <body>
     <%- include('partials/navbar') %>
     
     <main class="container">
-        <h1>Welcome to Joke App</h1>
+        <div class="top">Ready to joke around?</div>
+        <!-- Hero -->
+        <img src="https://images.unsplash.com/photo-1595420832643-faf4aaf65c5b?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" width="300" height="auto" class="mainimage"/>
         <%- include('jokeCard') %>
     </main>
 
     <%- include('partials/footer') %>
-    <script src="/js/main.js"></script>
+
+    <script>
+        // This function fetches and displays jokes by category
+        async function getJoke(category) {
+            try {
+                // Here, making an API request for a joke of user's choice
+                const response = await fetch(`/joke/${category}`);
+                const html = await response.text();
+                // Here, the joke container is filled with the new joke, ready to be displayed
+                document.getElementById('jokeContainer').innerHTML = html;
+            } catch (error) {
+                // Should never reach this point
+                console.error('Error:', error);
+            }
+        }
+
+        // This function fetches and displays jokes based on searched input
+        async function searchJoke() {
+            try {
+                // Here, retrieves the search input
+                const searchTerm = document.getElementById('searchInput').value;
+
+                // Makes sure it is not empty
+                if (!searchTerm) {
+                    document.getElementById('jokeContainer').innerHTML = '<div class="joke-result"><p class="error-message">Please enter a search term</p></div>';
+                    return;
+                }
+                
+                // Making an API request for a joke that has such a term
+                const response = await fetch(`/search?term=${encodeURIComponent(searchTerm)}`);
+                const html = await response.text();
+                // Here, the joke container is filled with the new joke, ready to be displayed
+                document.getElementById('jokeContainer').innerHTML = html;
+            } catch (error) {
+                // Sometimes, nothing will be found, so an error message will be displayed
+                console.error('Error:', error);
+            }
+        }
+    </script>
 </body>
 </html>

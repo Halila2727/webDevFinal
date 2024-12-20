@@ -1,12 +1,24 @@
+<!-- This is the component that will be the interface displaying the joke categories and search bar -->
 <div class="joke-card">
-    <h2>Get a Random Joke</h2>
+    <h2>Select a Joke Category</h2>
     <div class="categories">
-        <button onclick="getJoke('Programming')">Programming</button>
-        <button onclick="getJoke('Misc')">Misc</button>
-        <button onclick="getJoke('Dark')">Dark</button>
-        <button onclick="getJoke('Pun')">Pun</button>
-        <button onclick="getJoke('Spooky')">Spooky</button>
-        <button onclick="getJoke('Christmas')">Christmas</button>
+        <!-- Each button represents a category which will retrieve a joke within that category. This 'getJoke()' function is in index.ejs file -->
+        <button class="category-btn" onclick="getJoke('Programming')">Programming</button>
+        <button class="category-btn" onclick="getJoke('Misc')">Misc</button>
+        <button class="category-btn" onclick="getJoke('Dark')">Dark</button>
+        <button class="category-btn" onclick="getJoke('Pun')">Pun</button>
+        <button class="category-btn" onclick="getJoke('Spooky')">Spooky</button>
+        <button class="category-btn" onclick="getJoke('Christmas')">Christmas</button>
     </div>
+
+    <div class="search-section">
+        <h3>Search for a Joke</h3>
+        <div class="search-container">
+            <input type="text" id="searchInput" placeholder="Enter search term...">
+            <!-- This button searches for a joke with the searchInput above. This 'searchJoke()' function is in index.ejs file -->
+            <button onclick="searchJoke()">Search</button>
+        </div>
+    </div>
+
     <div id="jokeContainer"></div>
 </div>

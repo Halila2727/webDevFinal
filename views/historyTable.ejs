@@ -1,10 +1,43 @@
+<!-- Setting up the page that displays a table of jokes retrieved from our database -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Joke History</title>
-    <link rel="stylesheet" href="/css/styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f0f0f0;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        .history-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .history-table th,
+        .history-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        .history-table th {
+            background-color: #007bff;
+            color: white;
+        }
+        .history-table tr:hover {
+            background-color: #f5f5f5;
+        }
+    </style>
 </head>
 <body>
     <%- include('partials/navbar') %>
@@ -13,7 +46,7 @@
         <h1>Joke History</h1>
         <table class="history-table">
             <thead>
-                <tr>
+                <tr> <!-- Table structure for displaying joke data -->
                     <th>Type</th>
                     <th>Category</th>
                     <th>Content</th>
@@ -21,19 +54,22 @@
                 </tr>
             </thead>
             <tbody>
+                <!-- Loop through each joke in the jokes array passed from the server -->
                 <% jokes.forEach(joke => { %>
                     <tr>
                         <td><%= joke.type %></td>
                         <td><%= joke.category %></td>
                         <td>
+                            <!-- If single-line joke, display just the joke content -->
                             <% if (joke.type === 'single') { %>
                                 <%= joke.joke %>
+                            <!-- If two-part joke, display setup and delivery separately -->
                             <% } else { %>
                                 <p><strong>Setup:</strong> <%= joke.setup %></p>
                                 <p><strong>Delivery:</strong> <%= joke.delivery %></p>
                             <% } %>
                         </td>
-                        <td><%= new Date(joke.created_at).toLocaleDateString() %></td>
+                        <td><%= new Date(joke.created_at).toLocaleDateString() %></td> <!-- Formatting timestamp -->
                     </tr>
                 <% }) %>
             </tbody>

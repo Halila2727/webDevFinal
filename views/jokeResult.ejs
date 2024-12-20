@@ -1,9 +1,18 @@
+<!-- This is the component that will be the interface displaying the joke retrieved or error message if not possible -->
 <div class="joke-result">
-    <% if (joke.type === 'single') { %>
-        <p class="joke-text"><%= joke.joke %></p>
+    <!-- Returning an error message if no joke with specified input was found -->
+    <% if (typeof error !== 'undefined') { %>
+        <p class="error-message"><%= error %></p>
     <% } else { %>
-        <p class="joke-setup"><%= joke.setup %></p>
-        <p class="joke-delivery"><%= joke.delivery %></p>
+        <!-- Rendering based on if it was a single-line joke or a two-parter -->
+        <p><i><strong> Here is the joke! </strong></i></p>
+        <% if (joke.type === 'single') { %>
+            <p class="joke-text"><%= joke.joke %></p>
+        <% } else { %>
+            <p class="joke-setup"><%= joke.setup %></p>
+            <p class="joke-delivery"><%= joke.delivery %></p>
+        <% } %>
+        <!-- Informing the joke category -->
+        <span class="joke-category">The above joke was of the category: <strong><%= joke.category %></strong></span>
     <% } %>
-    <p class="joke-category">Category: <%= joke.category %></p>
 </div>

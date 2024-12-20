@@ -1,5 +1,7 @@
+// Importing postgres pool for connection
 const { Pool } = require('pg');
 
+// Creating connection pool for database using .env file
 const pool = new Pool({
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
@@ -8,7 +10,7 @@ const pool = new Pool({
   database: process.env.DB_NAME,
 });
 
-// Create table if it doesn't exist
+// Initializing database by creating jokes table if it doesn't exist
 const initDB = async () => {
   try {
     await pool.query(`
@@ -21,13 +23,15 @@ const initDB = async () => {
         delivery TEXT,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       )
-    `);
+    `);// note that I made one column 'joke' which is for single line jokes and setup and delivery is the two-line equivalent
     console.log('Database initialized');
   } catch (error) {
     console.error('Error initializing database:', error);
   }
 };
 
+// Running the database
 initDB();
 
+//Exporting for use in index.js
 module.exports = pool;
